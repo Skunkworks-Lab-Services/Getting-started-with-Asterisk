@@ -13,13 +13,13 @@ jobs:
     - name: Set up dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libncurses5-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev libjansson-dev libedit-dev
-        sudo apt-get install -y git
-        
+        sudo apt-get install -y build-essential libncurses5-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev libjansson-dev libedit-dev git
+        sudo apt-get install -y ruby-full
+        gem install bundler
+
     - name: Fork Asterisk Open Source Tutorial
       run: |
-        git clone https://github.com/asterisk/asterisk.git
-        mv asterisk examples/asterisk-tutorial
+        git clone https://github.com/asterisk/asterisk.git examples/asterisk-tutorial
 
     - name: Setup repository contents
       run: |
