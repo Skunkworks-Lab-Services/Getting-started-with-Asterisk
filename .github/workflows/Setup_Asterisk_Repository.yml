@@ -1,0 +1,373 @@
+name: Setup Asterisk Repository
+
+on: [push]
+
+jobs:
+  setup-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libncurses5-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev libjansson-dev libedit-dev
+        sudo apt-get install -y git
+        
+    - name: Fork Asterisk Open Source Tutorial
+      run: |
+        git clone https://github.com/asterisk/asterisk.git
+        mv asterisk examples/asterisk-tutorial
+
+    - name: Setup repository contents
+      run: |
+        # Create directory structure
+        mkdir -p examples
+        mkdir -p docs
+        mkdir -p web
+
+        # Create README.md
+        cat <<EOL > README.md
+# Getting Started with Asterisk
+
+![GitHub stars](https://img.shields.io/github/stars/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+![GitHub forks](https://img.shields.io/github/forks/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+![GitHub issues](https://img.shields.io/github/issues/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+![GitHub license](https://img.shields.io/github/license/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+
+![Asterisk](https://www.asterisk.org/wp-content/uploads/2018/12/logo-asterisk.png)
+
+Welcome to the "Getting Started with Asterisk" repository! This repository provides comprehensive resources and guides to help you install, configure, and effectively utilize Asterisk for various telecommunication needs.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Introduction
+
+> **Asterisk** is a powerful open-source framework for building communications applications. It is widely used to create a variety of telephony systems such as VoIP gateways, conference servers, and call centers. This repository aims to provide you with the necessary tools and knowledge to get started with Asterisk.
+
+## Features
+
+- Detailed installation guides
+- Configuration examples for various use cases
+- Best practices for deploying Asterisk in different environments
+- Troubleshooting tips and solutions
+
+## Installation
+
+### Prerequisites
+
+- A Linux-based operating system (CentOS, Ubuntu, Debian, etc.)
+- Basic knowledge of Linux command-line operations
+
+### Steps
+
+1. **Clone the Repository**
+   \`\`\`bash
+   git clone https://github.com/Skunkworks-Lab-Services/Getting-started-with-Asterisk.git
+   cd Getting-started-with-Asterisk
+   \`\`\`
+
+2. **Follow the Installation Guide**
+   - Refer to the \`installation.md\` file for detailed instructions on installing Asterisk on your system.
+
+> **Note:** Ensure your system is updated and all dependencies are installed before starting the installation process.
+
+## Configuration
+
+### Basic Configuration
+
+1. **Edit Configuration Files**
+   - Modify \`sip.conf\`, \`extensions.conf\`, and other necessary configuration files as per your requirements.
+   
+2. **Reload Asterisk**
+   \`\`\`bash
+   sudo asterisk -rx "reload"
+   \`\`\`
+
+### Example Configurations
+
+- Example configurations for IP PBX, VoIP gateways, and conferencing systems are provided in the \`examples/\` directory.
+
+> **Pro Tip:** Regularly back up your configuration files to prevent data loss.
+
+## Usage
+
+### Starting Asterisk
+
+- Start the Asterisk service:
+  \`\`\`bash
+  sudo systemctl start asterisk
+  \`\`\`
+
+### Accessing Asterisk CLI
+
+- Connect to the running Asterisk console:
+  \`\`\`bash
+  sudo asterisk -r
+  \`\`\`
+
+### Basic CLI Commands
+
+| Command              | Description                                    |
+|----------------------|------------------------------------------------|
+| \`asterisk -r\`        | Connect to the running Asterisk console        |
+| \`sip show peers\`     | Display the status of SIP peers                |
+| \`core restart now\`   | Restart the Asterisk service                   |
+
+## Contributing
+
+We welcome contributions from the community! If you would like to contribute, please fork the repository and create a pull request. For major changes, please open an issue first to discuss what you would like to change.
+
+> **Important:** Ensure that all code contributions are thoroughly tested before submitting a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the \`LICENSE\` file for more details.
+
+![License](https://img.shields.io/github/license/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+
+## Contact
+
+For any questions or inquiries, please contact Raydo Matthee at raydo@skunkworks.africa.
+
+---
+
+Thank you for using Asterisk! We hope this repository helps you get started and effectively utilize Asterisk for your telecommunication needs.
+
+![Thank You](https://www.asterisk.org/wp-content/uploads/2018/12/logo-asterisk.png)
+EOL
+
+        # Create installation.md
+        cat <<EOL > installation.md
+# Installation Guide
+
+## Prerequisites
+
+- A Linux-based operating system (CentOS, Ubuntu, Debian, etc.)
+- Basic knowledge of Linux command-line operations
+
+## Steps
+
+1. **Update System Packages**
+   \`\`\`bash
+   sudo apt-get update
+   sudo apt-get upgrade
+   \`\`\`
+
+2. **Install Dependencies**
+   \`\`\`bash
+   sudo apt-get install build-essential libncurses5-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev libjansson-dev libedit-dev
+   \`\`\`
+
+3. **Download Asterisk**
+   \`\`\`bash
+   cd /usr/src
+   sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-18-current.tar.gz
+   sudo tar -zxvf asterisk-18-current.tar.gz
+   cd asterisk-18.*
+   \`\`\`
+
+4. **Compile and Install Asterisk**
+   \`\`\`bash
+   sudo ./configure
+   sudo make
+   sudo make install
+   sudo make samples
+   sudo make config
+   \`\`\`
+
+5. **Start Asterisk**
+   \`\`\`bash
+   sudo systemctl start asterisk
+   sudo systemctl enable asterisk
+   \`\`\`
+
+6. **Verify Installation**
+   \`\`\`bash
+   sudo asterisk -rvvv
+   \`\`\`
+
+EOL
+
+        # Create LICENSE
+        cat <<EOL > LICENSE
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+EOL
+
+        # Create examples directory content
+        echo "This directory contains example configuration files for various Asterisk setups." > examples/README.md
+
+        # Create docs directory content
+        echo "This directory contains additional documentation for Asterisk setup and configuration." > docs/README.md
+
+        # Set up Jekyll for GitHub Pages
+        echo "source 'https://rubygems.org'" > web/Gemfile
+        echo "gem 'github-pages', group: :jekyll_plugins" >> web/Gemfile
+
+        cat <<EOL > web/_config.yml
+theme: jekyll-theme-cayman
+title: Getting Started with Asterisk
+description: Comprehensive resources and guides to help you install, configure, and effectively utilize Asterisk.
+baseurl: "/Getting-started-with-Asterisk"
+url: "https://burnt-exe.github.io"
+EOL
+
+        cat <<EOL > web/index.md
+---
+layout: default
+title: Home
+---
+
+# Getting Started with Asterisk
+
+![GitHub stars](https://img.shields.io/github/stars/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+![GitHub forks](https://img.shields.io/github/forks/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+![GitHub issues](https://img.shields.io/github/issues/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+![GitHub license](https://img.shields.io/github/license/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+
+![Asterisk](https://www.asterisk.org/wp-content/uploads/2018/12/logo-asterisk.png)
+
+Welcome to the "Getting Started with Asterisk" repository! This repository provides comprehensive resources and guides to help you install, configure, and effectively utilize Asterisk for various telecommunication needs.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Introduction
+
+> **Asterisk** is a powerful open-source framework for building communications applications. It is widely used to create a variety of telephony systems such as VoIP gateways, conference servers, and call centers. This repository aims to provide you with the necessary tools and knowledge to get started with Asterisk.
+
+## Features
+
+- Detailed installation guides
+- Configuration examples for various use cases
+- Best practices for deploying Asterisk in different environments
+- Troubleshooting tips and solutions
+
+## Installation
+
+### Prerequisites
+
+- A Linux-based operating system (CentOS, Ubuntu, Debian, etc.)
+- Basic knowledge of Linux command-line operations
+
+### Steps
+
+1. **Clone the Repository**
+   \`\`\`bash
+   git clone https://github.com/Skunkworks-Lab-Services/Getting-started-with-Asterisk.git
+   cd Getting-started-with-Asterisk
+   \`\`\`
+
+2. **Follow the Installation Guide**
+   - Refer to the \`installation.md\` file for detailed instructions on installing Asterisk on your system.
+
+> **Note:** Ensure your system is updated and all dependencies are installed before starting the installation process.
+
+## Configuration
+
+### Basic Configuration
+
+1. **Edit Configuration Files**
+   - Modify \`sip.conf\`, \`extensions.conf\`, and other necessary configuration files as per your requirements.
+   
+2. **Reload Asterisk**
+   \`\`\`bash
+   sudo asterisk -rx "reload"
+   \`\`\`
+
+### Example Configurations
+
+- Example configurations for IP PBX, VoIP gateways, and conferencing systems are provided in the \`examples/\` directory.
+
+> **Pro Tip:** Regularly back up your configuration files to prevent data loss.
+
+## Usage
+
+### Starting Asterisk
+
+- Start the Asterisk service:
+  \`\`\`bash
+  sudo systemctl start asterisk
+  \`\`\`
+
+### Accessing Asterisk CLI
+
+- Connect to the running Asterisk console:
+  \`\`\`bash
+  sudo asterisk -r
+  \`\`\`
+
+### Basic CLI Commands
+
+| Command              | Description                                    |
+|----------------------|------------------------------------------------|
+| \`asterisk -r\`        | Connect to the running Asterisk console        |
+| \`sip show peers\`     | Display the status of SIP peers                |
+| \`core restart now\`   | Restart the Asterisk service                   |
+
+## Contributing
+
+We welcome contributions from the community! If you would like to contribute, please fork the repository and create a pull request. For major changes, please open an issue first to discuss what you would like to change.
+
+> **Important:** Ensure that all code contributions are thoroughly tested before submitting a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the \`LICENSE\` file for more details.
+
+![License](https://img.shields.io/github/license/Skunkworks-Lab-Services/Getting-started-with-Asterisk)
+
+## Contact
+
+For any questions or inquiries, please contact Raydo Matthee at raydo@skunkworks.africa.
+
+---
+
+Thank you for using Asterisk! We hope this repository helps you get started and effectively utilize Asterisk for your telecommunication needs.
+
+![Thank You](https://www.asterisk.org/wp-content/uploads/2018/12/logo-asterisk.png)
+EOL
+
+    - name: Build and Deploy Jekyll Site
+      run: |
+        cd web
+        bundle install
+        bundle exec jekyll build
+        bundle exec jekyll serve --detach
